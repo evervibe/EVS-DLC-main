@@ -5,6 +5,46 @@ All notable changes to the EVS-DLC Development Stack will be documented in this 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2-alpha] - 2025-10-18
+
+### Added
+- **JWT Authentication System**
+  - Integrated @nestjs/jwt and @nestjs/passport for secure authentication
+  - Added JWT strategy with token validation
+  - Created JwtAuthGuard for protecting routes
+  - Added passport-jwt for JWT-based authentication
+  - Included bcrypt for future password hashing support
+- **Enhanced Auth Module**
+  - Updated AuthService to use JwtService for token generation
+  - Added token validation method
+  - Configured JWT module with async configuration
+  - Proper dependency injection for ConfigService
+- **Environment Configuration**
+  - Added JWT_EXPIRES_IN environment variable (default: 86400 seconds / 24 hours)
+  - JWT_SECRET configuration with validation
+- **Health Check Enhancement**
+  - Added auth status to health endpoint
+  - Displays JWT configuration status
+  - Updated version to 1.0.2-alpha in health response
+- **Documentation**
+  - Created comprehensive AUTH_GUIDE.md
+  - Includes authentication flow, examples, and best practices
+  - Frontend integration examples (JavaScript/TypeScript)
+  - cURL examples for testing
+  - Token structure explanation
+  - Security best practices guide
+
+### Changed
+- Updated API version to 1.0.2-alpha
+- Enhanced AuthModule with JWT and Passport integration
+- Improved auth service with proper token handling
+
+### Technical Details
+- Dependencies added: @nestjs/jwt, @nestjs/passport, passport-jwt, bcrypt
+- JWT tokens expire after 24 hours by default (configurable)
+- Tokens include user ID, username, and roles in payload
+- Health endpoint now reports auth system status
+
 ## [1.0.1-alpha] - 2025-10-18
 
 ### Changed

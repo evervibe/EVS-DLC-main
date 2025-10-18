@@ -1,32 +1,39 @@
 import { Injectable } from '@nestjs/common';
-import { sign } from 'jsonwebtoken';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { createLogger } from '../../common/utils';
 import { ApiError } from '../../common/errors';
 import { LoginDto, LoginResponseDto } from './auth.dto';
-import { env } from '../../config/env';
 
 @Injectable()
 export class AuthService {
   private logger = createLogger('AuthService');
 
+  constructor(
+    private jwtService: JwtService,
+    private configService: ConfigService,
+  ) {}
+
   async login(dto: LoginDto): Promise<LoginResponseDto> {
     this.logger.log('User login attempt', { username: dto.username });
 
     try {
-      const { username, password } = env.admin;
+      const adminUsername = this.configService.get<string>('ADMIN_USERNAME', 'admin');
+      const adminPassword = this.configService.get<string>('ADMIN_PASSWORD', 'admin');
 
-      if (dto.username !== username || dto.password !== password) {
+      if (dto.username !== adminUsername || dto.password !== adminPassword) {
         throw ApiError.unauthorized('Invalid credentials', 'AUTH_INVALID_CREDENTIALS');
       }
 
       const payload = {
-        sub: username,
-        username,
+        sub: adminUsername,
+        username: adminUsername,
         roles: ['admin'],
       };
 
-      const token = sign(payload, env.jwtSecret, { expiresIn: env.jwtExpiresIn });
-      const expiresAt = new Date(Date.now() + env.jwtExpiresIn * 1000).toISOString();
+      const token = this.jwtService.sign(payload);
+      const expiresIn = this.configService.get<number>('JWT_EXPIRES_IN', 3600);
+      const expiresAt = new Date(Date.now() + expiresIn * 1000).toISOString();
 
       this.logger.log('User authenticated', { username: dto.username });
 
@@ -34,8 +41,8 @@ export class AuthService {
         token,
         expiresAt,
         user: {
-          id: username,
-          username,
+          id: adminUsername,
+          username: adminUsername,
           roles: ['admin'],
         },
       };
@@ -45,6 +52,15 @@ export class AuthService {
       }
       this.logger.error('Login error', error instanceof Error ? error.stack : undefined);
       throw ApiError.internal('Login failed');
+    }
+  }
+
+  async validateToken(token: string): Promise<boolean> {
+    try {
+      await this.jwtService.verifyAsync(token);
+      return true;
+    } catch {
+      return false;
     }
   }
 }
