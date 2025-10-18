@@ -29,7 +29,7 @@ export class MetricsService {
 
     return {
       timestamp: new Date().toISOString(),
-      version: '1.2.0-alpha',
+      version: '1.2.1-alpha',
       databases: dbMetrics,
       cache: cacheMetrics,
       system: systemMetrics,
