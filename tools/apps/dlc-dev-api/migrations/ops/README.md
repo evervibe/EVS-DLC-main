@@ -25,6 +25,7 @@ docker exec -i mysql_container mysql -u root -proot < migrations/ops/001_create_
 ## Migration Files
 
 - `001_create_ops_database.sql` - Initial schema creation for db_ops
+- `002_ops_core_tables.sql` - Additional indexes and maintenance helpers (v1.2.3-alpha)
 
 ## Database Architecture
 

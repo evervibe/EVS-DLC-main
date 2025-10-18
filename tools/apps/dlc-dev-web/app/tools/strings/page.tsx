@@ -1,4 +1,5 @@
 import StringsClient from './stringsClient';
+import { apiUrl } from '@/lib/http';
 
 export default async function Page({ searchParams }: { searchParams: Promise<Record<string,string|undefined>> }) {
   const params = await searchParams;
@@ -7,13 +8,15 @@ export default async function Page({ searchParams }: { searchParams: Promise<Rec
   const lang = (params.lang ?? 'ger').toString();
   const q = (params.q ?? '').toString();
 
-  const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}/data/strings`);
-  url.searchParams.set('limit', String(limit));
-  url.searchParams.set('offset', String(offset));
-  url.searchParams.set('lang', lang);
-  if (q.trim()) url.searchParams.set('q', q);
+  const qs = new URLSearchParams({
+    limit: String(limit),
+    offset: String(offset),
+    lang,
+  });
+  if (q.trim()) qs.set('q', q);
 
-  const resp = await fetch(url.toString(), { cache: 'no-store' });
+  const path = `/data/strings?${qs.toString()}`;
+  const resp = await fetch(apiUrl(path), { cache: 'no-store' });
   const data = await resp.json();
 
   return <StringsClient initial={data} />;

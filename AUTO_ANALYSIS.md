@@ -1,3 +1,92 @@
+# AUTO_ANALYSIS — EVS-DLC (v1.2.3-alpha)
+
+Generated: snapshot for `v1.2.3-alpha` work (depth 3-4). Excludes: `.git`, `node_modules`, `.pnpm-store`, `dist`, `.next`, `.turbo`, `.vercel`.
+
+## 1) Directory tree (depth ~3)
+
+tools/
+  apps/
+    dlc-dev-api/
+      src/
+      migrations/
+      package.json
+      .env.example
+    dlc-dev-web/
+      app/
+      public/
+      package.json
+      .env.local.example
+infra/
+  docker-compose.yml
+  DB/
+    game/
+      docker-compose.yml
+      init/
+      servers/
+        dev/
+          000_create_databases.sql
+README.md
+CHANGELOG.md
+AGENT_LOG_v1.2.3.md
+AUTO_ANALYSIS.md
+
+Notes: tree is representative — several other docs and markdown files exist at repo root (AGENT_LOG*, IMPLEMENTATION_SUMMARY*, DEPLOYMENT_* etc.).
+
+## 2) package.json matrix (found / scanned)
+
+- tools/apps/dlc-dev-api/package.json
+  - name: dlc-dev-api
+  - version: 1.2.3-alpha
+  - top scripts: dev, build, start:prod, test, migrations:generate, migrations:run
+  - notable deps: @nestjs/* (10.x), @nestjs/typeorm 11.0.0, typeorm 0.3.27, mysql2, fastify, ioredis, ulid
+
+- tools/apps/dlc-dev-web/package.json
+  - name: dlc-dev-web
+  - version: 1.2.3-alpha
+  - top scripts: dev, build, start, lint, type-check
+  - notable deps: next 15.x, react 19.x
+
+No root `package.json` detected in repo root. Most work targets the two app packages above.
+
+## 3) Environment matrix (files found)
+
+- `/.env.example` (root): present; defines DB_AUTH_*, DB_GAME_*, DB_DATA_*, DB_OPS_* (db_ops added), JWT_SECRET, APP_VERSION=1.2.3-alpha, API_PORT=30089
+- `/tools/apps/dlc-dev-api/.env.example`: present; mirrors root API DB keys including DB_OPS_* defaults
+- `/tools/apps/dlc-dev-web/.env.local.example`: present; exposes NEXT_PUBLIC_* flags incl. NEXT_PUBLIC_FEATURE_STRINGS_EDIT
+- `/infra/DB/game/.env.example`: present (db import scripts reference db_ops)
+
+Observations:
+- New DB_OPS_* keys exist across root and API app examples. Some CI/workflow templates refer to DB_* values; ensure no outdated MYSQL_* variables remain.
+- APP_VERSION and package versions are 1.2.3-alpha in app packages.
+
+## 4) Infra / CI / Build scripts
+
+- infra/docker-compose.yml exists and wires DB_OPS_NAME/defaults into containers.
+- infra/DB/game/servers/dev/000_create_databases.sql contains `CREATE DATABASE IF NOT EXISTS db_ops`.
+- `.github/workflows/ci.yml` present; CI envs currently set DB_AUTH_NAME/DB_DATA_NAME (review for DB_OPS adoption if needed).
+- tools/apps/dlc-dev-api/package.json has migration scripts using TypeORM CLI (ts-node). Builds are standard `tsc` for API and `next build` for web.
+
+## 5) Architecture snapshot
+
+- Two main apps: `tools/apps/dlc-dev-api` (NestJS + Fastify + TypeORM) and `tools/apps/dlc-dev-web` (Next.js + React).
+- Multi-DB design present: `db_auth`, `db_db`, `db_data`, `db_post` (optional) and newly introduced `db_ops`.
+- TypeORM (0.3.x) used with named connections; `data` connection handles `t_string` module. `db_ops` config scaffolding exists in env/config and migrations/ops directory.
+
+## 6) Ports / Health expectations
+
+- API expected port: 30089 (env key: API_PORT)
+- Web expected port: 33440 (Next dev)
+- Health endpoints: API exposes health module; currently health should include ops connection once registered.
+
+## 7) Quick risks & notes (for next phases)
+
+- DB_OPS_* variables are present in examples and migration folder; ensure live configs match.
+- Migration folder `tools/apps/dlc-dev-api/migrations/ops` already exists with a `001_...` file; confirm content and add second migration if needed.
+- TypeORM connection scaffolding exists in config; adding a named `ops` connection will be consistent with existing pattern.
+
+---
+
+This file is generated as the Phase A analysis artifact required by the `v1.2.3-alpha` Ops-DB workstream.
 # AUTO_ANALYSIS.md — EVS-DLC Repository Analysis (v1.2.3-alpha)
 
 **Generated:** 2025-10-18  

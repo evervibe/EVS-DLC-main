@@ -74,6 +74,12 @@ services:
       DB_DATA_USER: ${DB_USER:-root}
       DB_DATA_PASS: ${DB_PASSWORD:-secret}
       DB_DATA_NAME: ${DB_DATA_NAME:-db_data}
+  # Operations DB (db_ops) used for audit/workflow/jobs
+  DB_OPS_HOST: mysql
+  DB_OPS_PORT: 3306
+  DB_OPS_USER: ${DB_USER:-root}
+  DB_OPS_PASS: ${DB_PASSWORD:-secret}
+  DB_OPS_NAME: ${DB_OPS_NAME:-db_ops}
       DB_POST_HOST: mysql
       DB_POST_PORT: 3306
       DB_POST_USER: ${DB_USER:-root}
@@ -85,7 +91,7 @@ services:
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:?ADMIN_PASSWORD must be set in environment}
       CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:33440}
       SWAGGER_ENABLED: ${SWAGGER_ENABLED:-false}
-      APP_VERSION: 1.2.0-alpha
+  APP_VERSION: 1.2.3-alpha
     ports:
       - "${API_PORT:-30089}:30089"
     depends_on:

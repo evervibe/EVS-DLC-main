@@ -1,11 +1,13 @@
-'use client';
-import { useMemo, useState, useTransition } from 'react';
+"use client";
+import { useMemo, useState, useTransition, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { apiFetch } from '@/lib/http';
+import { LANG_MAP, FlagEmoji } from '@/lib/flags';
 
 type Row = { a_index: number; value: string };
 type ApiResp = { items: Row[]; total: number; limit: number; offset: number; lang: string; q?: string };
 
-const LANGS = ['ger','usa','spn','frc','rus','jpn','chn','twn','ita','tur','nld','uk','base','dev'];
+const LANGS = Object.keys(LANG_MAP);
 
 const FEATURE_EDIT = process.env.NEXT_PUBLIC_FEATURE_STRINGS_EDIT === 'true';
 
@@ -40,6 +42,10 @@ export default function StringsClient({ initial }: { initial: ApiResp }) {
 
   const totalPages = useMemo(() => Math.max(1, Math.ceil((initial?.total ?? 0) / pageSize)), [initial, pageSize]);
 
+  // local items state for optimistic updates
+  const [items, setItems] = useState<Row[]>(initial?.items ?? []);
+  useEffect(() => { setItems(initial?.items ?? []); }, [initial]);
+
   function pushQuery(next: Partial<Record<string,string>>) {
     const n = new URLSearchParams(sp.toString());
     Object.entries(next).forEach(([k,v]) => v === undefined ? n.delete(k) : n.set(k, String(v)));
@@ -60,35 +66,34 @@ export default function StringsClient({ initial }: { initial: ApiResp }) {
 
   async function saveEdit(aIndex: number) {
     if (!editValue.trim()) return;
-    
+    // optimistic update locally
+    const prev = items.slice();
+    const idx = prev.findIndex(it => it.a_index === aIndex);
+    if (idx >= 0) {
+      prev[idx] = { ...prev[idx], value: editValue };
+      setItems(prev);
+    }
+
     try {
-      const token = localStorage.getItem('token'); // You'll need to implement auth token storage
-      const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/data/strings/${aIndex}`, {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : undefined;
+      await apiFetch(`/data/strings/${aIndex}`, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token ? `Bearer ${token}` : '',
+          Authorization: token ? `Bearer ${token}` : '',
         },
-        body: JSON.stringify({
-          lang,
-          value: editValue,
-          reason: editReason || undefined,
-        }),
+        body: JSON.stringify({ lang, value: editValue, reason: editReason || undefined }),
       });
-
-      if (resp.ok) {
-        alert('String erfolgreich aktualisiert!');
-        cancelEdit();
-        router.refresh();
-      } else if (resp.status === 409) {
+      cancelEdit();
+      router.refresh();
+    } catch (err: any) {
+      // rollback
+      setItems(initial?.items ?? []);
+      if (String(err).includes('HTTP 409')) {
         alert('Versions-Konflikt! Die Zeichenfolge wurde zwischenzeitlich geändert.');
       } else {
-        const err = await resp.json();
-        alert(`Fehler: ${err.message || 'Unbekannter Fehler'}`);
+        alert(err?.message || 'Fehler beim Speichern');
       }
-    } catch (error) {
-      alert('Netzwerkfehler beim Speichern');
-      console.error(error);
+      cancelEdit();
     }
   }
 
@@ -97,11 +102,9 @@ export default function StringsClient({ initial }: { initial: ApiResp }) {
     setHistoryData([]);
     
     try {
-      const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/data/strings/${aIndex}/history?lang=${lang}`);
-      if (resp.ok) {
-        const data = await resp.json();
-        setHistoryData(data);
-      }
+      const resp = await apiFetch(`/data/strings/${aIndex}/history?lang=${lang}`);
+      const data = await resp.json();
+      setHistoryData(data);
     } catch (error) {
       console.error('Failed to load history:', error);
     }

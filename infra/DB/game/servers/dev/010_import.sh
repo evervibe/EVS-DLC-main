@@ -15,5 +15,11 @@ echo "[010_import] -> db_db"
 mysql ${MYSQL_CLIENT_OPTS} -u root -p"${MYSQL_ROOT_PASSWORD}" db_db   < "${DUMPS_DIR}/db_db.sql"
 echo "[010_import] -> db_post"
 mysql ${MYSQL_CLIENT_OPTS} -u root -p"${MYSQL_ROOT_PASSWORD}" db_post < "${DUMPS_DIR}/db_post.sql"
+echo "[010_import] -> db_ops (optional)"
+if [ -f "${DUMPS_DIR}/db_ops.sql" ]; then
+	mysql ${MYSQL_CLIENT_OPTS} -u root -p"${MYSQL_ROOT_PASSWORD}" db_ops < "${DUMPS_DIR}/db_ops.sql"
+else
+	echo "[010_import] -> db_ops.sql not found, skipping"
+fi
 
 echo "[010_import] Done"

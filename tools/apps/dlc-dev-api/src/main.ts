@@ -30,8 +30,8 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: env.corsOrigin,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    origin: env.corsOrigin ?? [/^http:\/\/localhost:\d+$/, /^https:\/\/.*evervibe.*$/],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   });
