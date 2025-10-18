@@ -44,7 +44,7 @@ export class StringsEditorService {
       const [existingRows] = await dataConn.query(
         `SELECT a_index, ${column} AS current_value FROM t_string WHERE a_index = ? FOR UPDATE`,
         [aIndex]
-      );
+      ) as any[];
 
       if (!existingRows || existingRows.length === 0) {
         throw new NotFoundException('String not found');
@@ -56,7 +56,7 @@ export class StringsEditorService {
       const [stateRows] = await opsConn.query(
         `SELECT version FROM l10n_string_state WHERE a_index = ? AND lang = ? FOR UPDATE`,
         [aIndex, lang]
-      );
+      ) as any[];
 
       let currentVersion = 1;
       if (stateRows && stateRows.length > 0) {
@@ -138,7 +138,7 @@ export class StringsEditorService {
          ORDER BY created_at DESC 
          LIMIT 100`,
         params
-      );
+      ) as any[];
 
       return rows || [];
     } finally {
@@ -164,7 +164,7 @@ export class StringsEditorService {
       const [stateRows] = await conn.query(
         `SELECT version FROM l10n_string_state WHERE a_index = ? AND lang = ? FOR UPDATE`,
         [aIndex, lang]
-      );
+      ) as any[];
 
       if (!stateRows || stateRows.length === 0) {
         throw new NotFoundException('String state not found. Edit the string first.');
@@ -202,7 +202,7 @@ export class StringsEditorService {
          FROM l10n_string_state 
          WHERE a_index = ? AND lang = ?`,
         [aIndex, lang]
-      );
+      ) as any[];
 
       return rows && rows.length > 0 ? rows[0] : null;
     } finally {
@@ -222,7 +222,7 @@ export class StringsEditorService {
          WHERE a_index = ? 
          ORDER BY lang ASC`,
         [aIndex]
-      );
+      ) as any[];
 
       return rows || [];
     } finally {

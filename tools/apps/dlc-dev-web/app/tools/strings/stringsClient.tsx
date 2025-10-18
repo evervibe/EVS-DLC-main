@@ -25,7 +25,18 @@ export default function StringsClient({ initial }: { initial: ApiResp }) {
   const [editValue, setEditValue] = useState('');
   const [editReason, setEditReason] = useState('');
   const [showDrawer, setShowDrawer] = useState<number | null>(null);
-  const [historyData, setHistoryData] = useState<any[]>([]);
+  const [historyData, setHistoryData] = useState<Array<{
+    id: number;
+    a_index: number;
+    lang: string;
+    old_value: string;
+    new_value: string;
+    reason?: string;
+    actor: string;
+    tx_id: string;
+    stage: string;
+    created_at: string;
+  }>>([]);
 
   const totalPages = useMemo(() => Math.max(1, Math.ceil((initial?.total ?? 0) / pageSize)), [initial, pageSize]);
 
@@ -230,7 +241,7 @@ export default function StringsClient({ initial }: { initial: ApiResp }) {
               {historyData.length === 0 && (
                 <p className="text-gray-500 text-sm">Keine Einträge gefunden</p>
               )}
-              {historyData.map((h: any, i: number) => (
+              {historyData.map((h, i) => (
                 <div key={h.id || i} className="border rounded p-3 space-y-1 text-sm">
                   <div className="flex justify-between items-start">
                     <span className="font-mono text-xs text-gray-500">{h.lang}</span>
