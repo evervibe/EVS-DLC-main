@@ -19,6 +19,7 @@ export class HealthController {
       game: false,
       data: false,
       post: false,
+      ops: false,
     };
 
     // Test each database connection
@@ -49,7 +50,7 @@ export class HealthController {
     return {
       status: allDbsHealthy ? 'ok' : 'degraded',
       timestamp: new Date().toISOString(),
-      version: '1.2.1-alpha',
+      version: '1.2.3-alpha',
       rateLimit: 'active',
       databases: dbStatus,
       cache: cacheStatus,

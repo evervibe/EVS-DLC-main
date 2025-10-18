@@ -1,10 +1,12 @@
 /**
  * Role-Based Access Control (RBAC) Roles
- * Version: 1.2.0
+ * Version: 1.2.3
  */
 
 export enum UserRole {
   USER = 'user',
+  TRANSLATOR = 'translator',
+  REVIEWER = 'reviewer',
   ADMIN = 'admin',
   DEVOPS = 'devops',
 }
@@ -15,8 +17,10 @@ export enum UserRole {
  */
 export const ROLE_HIERARCHY: Record<UserRole, UserRole[]> = {
   [UserRole.USER]: [UserRole.USER],
-  [UserRole.ADMIN]: [UserRole.USER, UserRole.ADMIN],
-  [UserRole.DEVOPS]: [UserRole.USER, UserRole.ADMIN, UserRole.DEVOPS],
+  [UserRole.TRANSLATOR]: [UserRole.USER, UserRole.TRANSLATOR],
+  [UserRole.REVIEWER]: [UserRole.USER, UserRole.TRANSLATOR, UserRole.REVIEWER],
+  [UserRole.ADMIN]: [UserRole.USER, UserRole.TRANSLATOR, UserRole.REVIEWER, UserRole.ADMIN],
+  [UserRole.DEVOPS]: [UserRole.USER, UserRole.TRANSLATOR, UserRole.REVIEWER, UserRole.ADMIN, UserRole.DEVOPS],
 };
 
 /**

@@ -53,6 +53,13 @@ import { CacheModule } from './core/cache/cache.module';
         DB_POST_PASS: Joi.string().allow('').default('root'),
         DB_POST_NAME: Joi.string().default('db_post'),
         
+        // Ops Database
+        DB_OPS_HOST: Joi.string().default('localhost'),
+        DB_OPS_PORT: Joi.number().default(3306),
+        DB_OPS_USER: Joi.string().default('root'),
+        DB_OPS_PASS: Joi.string().allow('').default('root'),
+        DB_OPS_NAME: Joi.string().default('db_ops'),
+        
         // Cache/Redis Configuration
         USE_CACHE: Joi.boolean().default(false),
         REDIS_URL: Joi.string().uri().default('redis://localhost:6379'),
