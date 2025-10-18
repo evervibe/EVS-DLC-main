@@ -6,17 +6,30 @@
 │   (Frontend)     │  HTTP   │    (Backend)     │   TCP   │   (Docker)       │
 │                  │         │                  │         │                  │
 │   Next.js 15     │         │   NestJS 10      │         │   - db_auth      │
-│   React 19       │         │   Fastify 4      │         │   - db_game      │
+│   React 19       │         │   Fastify 4      │         │   - db_db        │
 │   TypeScript 5   │         │   TypeORM 0.3    │         │   - db_data      │
 │   Port: 33440    │         │   Port: 30089    │         │   - db_post      │
 └──────────────────┘         └──────────────────┘         └──────────────────┘
+```
+
+### Database Layout (Last Chaos Architecture)
+
+```
+┌───────────────┬──────────┬─────────────────────────────────┐
+│  Database     │  Port    │  Purpose                        │
+├───────────────┼──────────┼─────────────────────────────────┤
+│ db_auth       │ 3306     │ Accounts & Authentication       │
+│ db_db         │ 3306     │ Game Data (Characters, World)   │
+│ db_data       │ 3306     │ Static Data (Items, Skills)     │
+│ db_post       │ 3306     │ CMS/Posts & Community Content   │
+└───────────────┴──────────┴─────────────────────────────────┘
 ```
 
 ---
 
 ## 🔧 Technology Stack
 
-### Backend (DLC Dev API v1.2.0-alpha)
+### Backend (DLC Dev API v1.2.1-alpha)
 - **Framework:** NestJS 10.4.20 with Fastify adapter (pure Fastify, no Express)
 - **Language:** TypeScript 5.3.3
 - **ORM:** TypeORM 0.3.27
@@ -27,7 +40,7 @@
 - **Validation:** Joi 18.0.1 + class-validator 0.14.2
 - **Location:** `tools/apps/dlc-dev-api/`
 
-### Frontend (DLC Dev Web v1.2.0-alpha)
+### Frontend (DLC Dev Web v1.2.1-alpha)
 - **Framework:** Next.js 15.5.6 (App Router)
 - **UI Library:** React 19.1.0
 - **Language:** TypeScript 5.9.3
@@ -146,7 +159,10 @@ See `.env.example` for a complete list of configuration options.
 
 **Key Variables:**
 - `API_PORT`: Backend API port (default: 30089)
-- `MYSQL_HOST/PORT/USER/PASSWORD`: Database configuration
+- `DB_AUTH_HOST/PORT/USER/PASS/NAME`: Auth database configuration
+- `DB_GAME_HOST/PORT/USER/PASS/NAME`: Game database configuration (db_db)
+- `DB_DATA_HOST/PORT/USER/PASS/NAME`: Static data database configuration
+- `DB_POST_HOST/PORT/USER/PASS/NAME`: Post/CMS database configuration
 - `NEXT_PUBLIC_API_URL`: Frontend API endpoint
 - `JWT_SECRET`: JWT signing secret (MUST change for production)
 - `CORS_ORIGIN`: Allowed frontend origins
@@ -158,4 +174,4 @@ See `.env.example` for a complete list of configuration options.
 ---
 
 **Built with ❤️ by EverVibe Studios**  
-**Version:** 1.2.0-alpha (Production Ready) | **Updated:** 2025-10-18
+**Version:** 1.2.1-alpha (Production Ready) | **Updated:** 2025-10-18

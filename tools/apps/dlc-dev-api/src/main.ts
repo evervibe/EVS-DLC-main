@@ -8,7 +8,7 @@ import { testDbConnections } from './common/db';
 import { validationPipe, RateLimitMiddleware } from './common/middleware';
 
 async function bootstrap() {
-  console.log('🚀 Starting DLC API v1.2.0-alpha...');
+  console.log('🚀 Starting DLC API v1.2.1-alpha...');
 
   // Test database connections
   try {
@@ -48,7 +48,7 @@ async function bootstrap() {
     const { SwaggerModule, DocumentBuilder } = await import('@nestjs/swagger');
     const config = new DocumentBuilder()
       .setTitle('DLC API')
-      .setVersion(process.env.APP_VERSION ?? '1.2.0-alpha')
+      .setVersion(process.env.APP_VERSION ?? '1.2.1-alpha')
       .addBearerAuth()
       .build();
     const document = SwaggerModule.createDocument(app, config);
@@ -59,14 +59,14 @@ async function bootstrap() {
   const fastifyInstance = app.getHttpAdapter().getInstance();
 
   fastifyInstance.get('/', async (_request, reply) => {
-    reply.send({ message: 'DLC API Root - v1.2.0-alpha', status: 'running' });
+    reply.send({ message: 'DLC API Root - v1.2.1-alpha', status: 'running' });
   });
 
   // Start listening
   await app.listen(env.apiPort, '0.0.0.0');
 
   console.log('');
-  console.log('✅ DLC API v1.2.0-alpha running securely on port', env.apiPort);
+  console.log('✅ DLC API v1.2.1-alpha running securely on port', env.apiPort);
   console.log('✅ Environment:', env.nodeEnv);
   console.log('✅ Fastify adapter enabled (v4.x compatible)');
   console.log('✅ Helmet security enabled');
