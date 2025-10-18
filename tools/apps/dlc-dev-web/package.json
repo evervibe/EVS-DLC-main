@@ -1,11 +1,11 @@
 {
   "name": "dlc-dev-web",
-  "version": "1.0.0-alpha",
+  "version": "1.0.1-alpha",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3000",
+    "dev": "next dev --port 33440",
     "build": "next build",
-    "start": "next start --port 3000",
+    "start": "next start --port 33440",
     "lint": "eslint",
     "type-check": "tsc --noEmit"
   },

@@ -5,6 +5,24 @@ All notable changes to the EVS-DLC Development Stack will be documented in this 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1-alpha] - 2025-10-18
+
+### Changed
+- **Port Standardization**: Updated frontend web port from `3000` to `33440`
+  - Updated all configuration files (`.env.example`, `docker-compose.yml`)
+  - Updated package.json scripts for dev and start commands
+  - Updated Dockerfile EXPOSE and PORT environment variable
+  - Updated health check endpoints
+- **CORS Configuration**: Updated `CORS_ORIGIN` from `http://localhost:3000` to `http://localhost:33440`
+- **Version Bumps**: Updated API and Web package versions to `1.0.1-alpha`
+- **Documentation**: Updated README.md with new port architecture
+
+### Technical Details
+- Web now runs on port `33440` (development and production)
+- API continues on port `30089`
+- All environment files synchronized with new ports
+- Docker Compose configuration updated for new web port mapping
+
 ## [1.0.0-alpha] - 2025-10-18
 
 ### Added
