@@ -5,6 +5,49 @@ All notable changes to the EVS-DLC Development Stack will be documented in this 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0-alpha] - 2025-10-18
+
+### Added
+- **Enhanced UI/UX System**
+  - Created modern layout system with Sidebar, TopBar, and DashboardLayout components
+  - Responsive sidebar with mobile support (hamburger menu)
+  - Sticky top bar with logout functionality
+  - Version banner in footer (v1.1.0-alpha)
+- **Dynamic API Status Widgets**
+  - ApiStatusWidget: Real-time API health monitoring
+  - MetricsWidget: System metrics, memory usage, database pool stats
+  - Auto-refresh every 30 seconds
+  - Loading states and error handling
+- **Backend Metrics Endpoint**
+  - New `/health/metrics` endpoint for detailed system metrics
+  - Database pool statistics (active/idle/total connections)
+  - System information (uptime, memory, Node version, platform)
+  - Cache metrics with key count
+- **Modern Dashboard Design**
+  - Card-based layout with responsive grid system
+  - Feature highlight cards with gradients
+  - Technology stack display with icons
+  - Welcome section with feature descriptions
+- **UI Components**
+  - Reusable layout components (Sidebar, TopBar, DashboardLayout)
+  - Widget components with consistent styling
+  - Dark mode support throughout
+  - Tailwind CSS 4 utilities
+
+### Changed
+- Updated all versions to 1.1.0-alpha
+- Enhanced health check to report version 1.1.0-alpha
+- Modernized dashboard page with new layout system
+- Improved mobile responsiveness
+- Updated metadata in layout.tsx
+
+### Technical Details
+- React 19 with Next.js 15 App Router
+- Client-side components with "use client" directive
+- TypeScript strict mode with proper typing
+- CSS Grid and Flexbox for layouts
+- Real-time data fetching with fetch API
+
 ## [1.0.2-alpha] - 2025-10-18
 
 ### Added

@@ -2,12 +2,14 @@ import { Controller, Get } from '@nestjs/common';
 import { dbPools } from '../../common/db';
 import { RedisService } from '../../core/redis/redis.service';
 import { AuthService } from '../auth/auth.service';
+import { MetricsService } from './metrics.service';
 
 @Controller('health')
 export class HealthController {
   constructor(
     private readonly redisService: RedisService,
     private readonly authService: AuthService,
+    private readonly metricsService: MetricsService,
   ) {}
 
   @Get()
@@ -47,7 +49,7 @@ export class HealthController {
     return {
       status: allDbsHealthy ? 'ok' : 'degraded',
       timestamp: new Date().toISOString(),
-      version: '1.0.2-alpha',
+      version: '1.1.0-alpha',
       rateLimit: 'active',
       databases: dbStatus,
       cache: cacheStatus,
@@ -61,5 +63,10 @@ export class HealthController {
       status: 'ready',
       timestamp: new Date().toISOString(),
     };
+  }
+
+  @Get('metrics')
+  async getMetrics() {
+    return this.metricsService.getMetrics();
   }
 }
