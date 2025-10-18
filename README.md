@@ -9,45 +9,48 @@
 │   React 19       │         │   Fastify 4      │         │   - db_db        │
 │   TypeScript 5   │         │   TypeORM 0.3    │         │   - db_data      │
 │   Port: 33440    │         │   Port: 30089    │         │   - db_post      │
+│                  │         │                  │         │   - db_ops       │
 └──────────────────┘         └──────────────────┘         └──────────────────┘
 ```
 
-### Database Layout (Last Chaos Architecture)
+### Database Layout (Last Chaos Architecture + Operations)
 
 ```
-┌───────────────┬──────────┬───────────────────────────────────────┐
-│  Database     │  Port    │  Purpose                              │
-├───────────────┼──────────┼───────────────────────────────────────┤
-│ db_auth       │ 3306     │ Accounts & Authentication             │
-│ db_db         │ 3306     │ Game Data (Characters, World)         │
-│ db_data       │ 3306     │ Static Data (Items, Skills, Strings)  │
-│ db_post       │ 3306     │ CMS/Posts & Community Content         │
-└───────────────┴──────────┴───────────────────────────────────────┘
+┌───────────────┬──────────┬────────────────────────────────────────────┐
+│  Database     │  Port    │  Purpose                                   │
+├───────────────┼──────────┼────────────────────────────────────────────┤
+│ db_auth       │ 3306     │ Accounts & Authentication                  │
+│ db_db         │ 3306     │ Game Data (Characters, World)              │
+│ db_data       │ 3306     │ Static Data (Items, Skills, Strings)       │
+│ db_post       │ 3306     │ CMS/Posts & Community Content              │
+│ db_ops        │ 3306     │ Operations (Audit, Workflow, Jobs, Locks)  │
+└───────────────┴──────────┴────────────────────────────────────────────┘
 ```
 
-**Core 3-Database Model:** The primary architecture focuses on `db_auth`, `db_db`, and `db_data`. The `db_post` database is optional for CMS functionality.
+**5-Database Model (v1.2.3+):** Core databases are `db_auth`, `db_db`, and `db_data`. Optional databases are `db_post` (CMS) and `db_ops` (operations/workflow).
 
 ---
 
 ## 🔧 Technology Stack
 
-### Backend (DLC Dev API v1.2.2-alpha)
+### Backend (DLC Dev API v1.2.3-alpha)
 - **Framework:** NestJS 10.4.20 with Fastify adapter (pure Fastify, no Express)
 - **Language:** TypeScript 5.3.3
 - **ORM:** TypeORM 0.3.27
-- **Database:** MySQL 8.0
+- **Database:** MySQL 8.0 (5 databases: auth, game, data, post, ops)
 - **Cache:** Redis 7 (ioredis 5.8.1)
 - **Security:** @fastify/helmet 11.0.0, @fastify/rate-limit 10.3.0
-- **Auth:** JWT (jsonwebtoken 9.0.2) with RBAC
+- **Auth:** JWT (jsonwebtoken 9.0.2) with RBAC (translator, reviewer roles)
 - **Validation:** Joi 18.0.1 + class-validator 0.14.2
+- **Workflow:** Dual-write pattern with audit trail (ulid 2.3.0)
 - **Location:** `tools/apps/dlc-dev-api/`
 
-### Frontend (DLC Dev Web v1.2.2-alpha)
+### Frontend (DLC Dev Web v1.2.3-alpha)
 - **Framework:** Next.js 15.5.6 (App Router)
 - **UI Library:** React 19.1.0
 - **Language:** TypeScript 5.9.3
 - **Styling:** Tailwind CSS 4.1.14
-- **Features:** Login/Dashboard, API proxy, Dark mode, Tools → Strings
+- **Features:** Login/Dashboard, API proxy, Dark mode, Tools → Strings (with editor)
 - **Location:** `tools/apps/dlc-dev-web/`
 
 ### Infrastructure

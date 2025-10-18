@@ -35,6 +35,7 @@ export interface EnvConfig {
   dbGame: DatabaseConfig;
   dbData: DatabaseConfig;
   dbPost: DatabaseConfig;
+  dbOps: DatabaseConfig;
   cache: CacheConfig;
 }
 
@@ -119,6 +120,14 @@ export const env: EnvConfig = {
     user: getEnvValue('DB_POST_USER', 'root'),
     password: getEnvValue('DB_POST_PASS', 'root'),
     database: getEnvValue('DB_POST_NAME', 'db_post'),
+  },
+  
+  dbOps: {
+    host: getEnvValue('DB_OPS_HOST', 'localhost'),
+    port: getEnvNumber('DB_OPS_PORT', 3306),
+    user: getEnvValue('DB_OPS_USER', 'root'),
+    password: getEnvValue('DB_OPS_PASS', 'root'),
+    database: getEnvValue('DB_OPS_NAME', 'db_ops'),
   },
   
   cache: {

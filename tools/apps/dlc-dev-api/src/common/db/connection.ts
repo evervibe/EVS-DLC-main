@@ -6,6 +6,7 @@ export interface DatabasePools {
   game: mysql.Pool;
   data: mysql.Pool;
   post: mysql.Pool;
+  ops: mysql.Pool;
 }
 
 function createPool(config: DatabaseConfig): mysql.Pool {
@@ -26,6 +27,7 @@ export const dbPools: DatabasePools = {
   game: createPool(env.dbGame),
   data: createPool(env.dbData),
   post: createPool(env.dbPost),
+  ops: createPool(env.dbOps),
 };
 
 export async function testDbConnections(): Promise<void> {
@@ -34,6 +36,7 @@ export async function testDbConnections(): Promise<void> {
     { name: 'game', config: env.dbGame },
     { name: 'data', config: env.dbData },
     { name: 'post', config: env.dbPost },
+    { name: 'ops', config: env.dbOps },
   ];
   
   for (const { name, config } of databases) {
@@ -54,6 +57,7 @@ export async function closeDatabaseConnections(): Promise<void> {
     dbPools.game.end(),
     dbPools.data.end(),
     dbPools.post.end(),
+    dbPools.ops.end(),
   ]);
   console.log('All database connections closed');
 }

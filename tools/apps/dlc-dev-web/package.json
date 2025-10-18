@@ -1,6 +1,6 @@
 {
   "name": "dlc-dev-web",
-  "version": "1.2.2-alpha",
+  "version": "1.2.3-alpha",
   "private": true,
   "scripts": {
     "dev": "next dev --port 33440",

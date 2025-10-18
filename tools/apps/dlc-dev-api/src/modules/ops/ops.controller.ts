@@ -26,6 +26,7 @@ export class OpsController {
       game: false,
       data: false,
       post: false,
+      ops: false,
     };
 
     // Test each database connection
