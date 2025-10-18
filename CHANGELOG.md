@@ -5,6 +5,118 @@ All notable changes to the EVS-DLC Development Stack will be documented in this 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.3-alpha] - 2025-10-18
+
+### Added
+- **Operations Database (`db_ops`)**
+  - New dedicated database for operational workflows, auditing, and background jobs
+  - `l10n_string_audit`: Complete audit trail for all string edits with transaction stages (prepare/committed/failed)
+  - `l10n_string_state`: Workflow state tracking (draft/reviewed/published) with optimistic locking via version column
+  - `ops_job`: Background job queue for async operations (reconcile, export, etc.)
+  - `ops_lock`: Distributed resource locking mechanism
+  - SQL migrations in `tools/apps/dlc-dev-api/migrations/ops/`
+- **Strings Editor & Workflow (Backend)**
+  - New `StringsEditorService` with dual-write pattern for transactional string edits
+  - `PATCH /data/strings/:id` - Edit strings with optimistic locking (requires `translator` role)
+  - `GET /data/strings/:id/history` - View complete edit history with audit trail
+  - `POST /data/strings/:id/state` - Update workflow state (requires `reviewer` role)
+  - `GET /data/strings/:id/state` - Get workflow state for string
+  - ULID-based transaction IDs for tracking and reconciliation
+  - Validation: UTF-8, 255-byte limit, optimistic locking with version checking
+  - Error handling: Transaction rollback with audit stage marking (prepare/committed/failed)
+- **RBAC Extensions**
+  - New roles: `translator` (can edit strings), `reviewer` (can change workflow state)
+  - Role hierarchy: user < translator < reviewer < admin < devops
+  - Guards and decorators for endpoint protection
+- **Frontend Strings Editor**
+  - Inline editing with edit/cancel buttons
+  - History drawer showing complete audit trail with old/new values
+  - Visual diff display (red for old, green for new)
+  - Transaction stage indicators (committed/prepare/failed)
+  - Feature flag: `NEXT_PUBLIC_FEATURE_STRINGS_EDIT=true`
+  - German UI labels (Bearbeiten, Verlauf, Speichern, Abbrechen)
+  - Real-time conflict detection with version checking
+  - Optional edit reason field
+
+### Changed
+- **Environment Configuration**
+  - All `.env.example` files updated to v1.2.3-alpha
+  - Added DB_OPS_* environment variables across all configs
+  - Updated `NEXT_PUBLIC_APP_VERSION` to 1.2.3-alpha
+  - Added `NEXT_PUBLIC_FEATURE_STRINGS_EDIT` feature flag
+- **Database Architecture**
+  - Expanded from 4-database to 5-database model: auth, game, data, post, **ops**
+  - Health checks now include ops database status
+  - Connection pooling extended to ops database
+  - TypeORM configuration updated for ops connection
+- **Version Bumps**
+  - API package.json: 1.2.2-alpha → 1.2.3-alpha
+  - Web package.json: 1.2.2-alpha → 1.2.3-alpha
+  - Health endpoint version: 1.2.1-alpha → 1.2.3-alpha
+  - RBAC roles version: 1.2.0 → 1.2.3
+
+### Technical Details
+- **Dual-Write Pattern:**
+  1. Insert audit record (stage='prepare') with tx_id
+  2. Update db_data.t_string column
+  3. Upsert db_ops.l10n_string_state (version++)
+  4. Update audit stage to 'committed'
+  5. Reconcile worker handles stuck 'prepare' records
+- **Optimistic Locking:**
+  - `ifVersion` parameter in edit requests
+  - Version conflict returns HTTP 409
+  - Version auto-increments on each change
+- **Audit Trail:**
+  - All edits tracked with old/new values
+  - Actor (username) recorded
+  - Optional reason field
+  - ULID transaction IDs for tracing
+  - Stage tracking for reconciliation
+- **Dependencies Added:**
+  - `ulid` (^2.3.0) - ULID generation for transaction IDs
+
+### Database Schema
+```sql
+db_ops
+├── l10n_string_audit    -- Tracks all string changes
+│   ├── id (BIGINT PK)
+│   ├── a_index (INT)
+│   ├── lang (VARCHAR(8))
+│   ├── old_value, new_value (VARCHAR(255))
+│   ├── reason (VARCHAR(255))
+│   ├── actor (VARCHAR(64))
+│   ├── tx_id (CHAR(26))
+│   ├── stage (ENUM: prepare, committed, failed)
+│   └── created_at (TIMESTAMP)
+├── l10n_string_state    -- Workflow state per string+lang
+│   ├── a_index, lang (PK)
+│   ├── status (ENUM: draft, reviewed, published)
+│   ├── version (INT) -- for optimistic locking
+│   ├── updated_by (VARCHAR(64))
+│   └── updated_at (TIMESTAMP)
+├── ops_job              -- Background job queue
+│   ├── id (BIGINT PK)
+│   ├── type (VARCHAR(32))
+│   ├── payload (JSON)
+│   ├── status (ENUM: queued, running, done, failed)
+│   └── timestamps
+└── ops_lock             -- Resource locking
+    ├── resource (VARCHAR(64) PK)
+    ├── locked_by (VARCHAR(64))
+    └── expires_at (TIMESTAMP)
+```
+
+### Documentation
+- Created `migrations/ops/README.md` - Migration guide and schema documentation
+- Created `migrations/ops/001_create_ops_database.sql` - Initial ops database schema
+- Updated CHANGELOG.md with v1.2.3-alpha release notes
+
+### Next Releases (Planned)
+- **v1.2.4-alpha:** Bulk string import/export (CSV/JSON) with dry-run mode
+- **v1.2.5-alpha:** Reconcile worker for stuck audit records
+- **v1.2.6-alpha:** Items editor (t_item) with similar workflow
+- **v1.2.7-alpha:** Skills/Skilllevel editor with level matrix
+
 ## [1.2.2-alpha] - 2025-10-18
 
 ### Added
