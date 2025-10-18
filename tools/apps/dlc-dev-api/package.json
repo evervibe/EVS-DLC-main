@@ -1,6 +1,6 @@
 {
-  "name": "dlc-api",
-  "version": "1.3.3",
+  "name": "dlc-dev-api",
+  "version": "1.0.0-alpha",
   "description": "DLC Backend API with NestJS + Fastify",
   "author": "",
   "private": true,
