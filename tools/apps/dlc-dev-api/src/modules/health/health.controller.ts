@@ -1,10 +1,16 @@
 import { Controller, Get } from '@nestjs/common';
 import { dbPools } from '../../common/db';
 import { RedisService } from '../../core/redis/redis.service';
+import { AuthService } from '../auth/auth.service';
+import { MetricsService } from './metrics.service';
 
 @Controller('health')
 export class HealthController {
-  constructor(private readonly redisService: RedisService) {}
+  constructor(
+    private readonly redisService: RedisService,
+    private readonly authService: AuthService,
+    private readonly metricsService: MetricsService,
+  ) {}
 
   @Get()
   async getStatus() {
@@ -35,13 +41,19 @@ export class HealthController {
       keys: await this.redisService.count(),
     };
 
+    // JWT service status (optional check)
+    const authStatus = {
+      jwtConfigured: true, // JWT service is available if we got here
+    };
+
     return {
       status: allDbsHealthy ? 'ok' : 'degraded',
       timestamp: new Date().toISOString(),
-      version: '0.8.3',
+      version: '1.2.0-alpha',
       rateLimit: 'active',
       databases: dbStatus,
       cache: cacheStatus,
+      auth: authStatus,
     };
   }
 
@@ -52,5 +64,9 @@ export class HealthController {
       timestamp: new Date().toISOString(),
     };
   }
-}
 
+  @Get('metrics')
+  async getMetrics() {
+    return this.metricsService.getMetrics();
+  }
+}

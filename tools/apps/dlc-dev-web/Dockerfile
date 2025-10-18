@@ -18,7 +18,7 @@ COPY . .
 # Set build-time environment variables
 ARG NEXT_PUBLIC_API_URL=http://localhost:30089
 ARG NEXT_PUBLIC_APP_ENV=production
-ARG NEXT_PUBLIC_APP_VERSION=1.0.0-alpha
+ARG NEXT_PUBLIC_APP_VERSION=1.2.0-alpha
 
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_APP_ENV=$NEXT_PUBLIC_APP_ENV
@@ -42,9 +42,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 33440
 
-ENV PORT=3000
+ENV PORT=33440
 ENV HOSTNAME="0.0.0.0"
 
 CMD ["node", "server.js"]

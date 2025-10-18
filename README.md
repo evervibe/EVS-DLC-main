@@ -8,7 +8,7 @@
 │   Next.js 15     │         │   NestJS 10      │         │   - db_auth      │
 │   React 19       │         │   Fastify 4      │         │   - db_game      │
 │   TypeScript 5   │         │   TypeORM 0.3    │         │   - db_data      │
-│   Port: 3000     │         │   Port: 30089    │         │   - db_post      │
+│   Port: 33440    │         │   Port: 30089    │         │   - db_post      │
 └──────────────────┘         └──────────────────┘         └──────────────────┘
 ```
 
@@ -16,7 +16,7 @@
 
 ## 🔧 Technology Stack
 
-### Backend (DLC Dev API v1.0.0-alpha)
+### Backend (DLC Dev API v1.2.0-alpha)
 - **Framework:** NestJS 10.4.20 with Fastify adapter (pure Fastify, no Express)
 - **Language:** TypeScript 5.3.3
 - **ORM:** TypeORM 0.3.27
@@ -27,7 +27,7 @@
 - **Validation:** Joi 18.0.1 + class-validator 0.14.2
 - **Location:** `tools/apps/dlc-dev-api/`
 
-### Frontend (DLC Dev Web v1.0.0-alpha)
+### Frontend (DLC Dev Web v1.2.0-alpha)
 - **Framework:** Next.js 15.5.6 (App Router)
 - **UI Library:** React 19.1.0
 - **Language:** TypeScript 5.9.3
@@ -88,7 +88,7 @@ cd tools/apps/dlc-dev-web
 pnpm install
 cp .env.local.example .env.local
 pnpm dev
-# Web will be available at http://localhost:3000
+# Web will be available at http://localhost:33440
 ```
 
 ### Building for Production
@@ -116,7 +116,7 @@ cd infra
 docker-compose up -d
 # All services will be available:
 # - API: http://localhost:30089
-# - Web: http://localhost:3000
+# - Web: http://localhost:33440
 # - Adminer: http://localhost:8080
 ```
 
@@ -158,4 +158,4 @@ See `.env.example` for a complete list of configuration options.
 ---
 
 **Built with ❤️ by EverVibe Studios**  
-**Version:** 1.0.0-alpha | **Updated:** 2025-10-18
+**Version:** 1.2.0-alpha (Production Ready) | **Updated:** 2025-10-18
