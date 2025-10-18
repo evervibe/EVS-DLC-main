@@ -23,7 +23,7 @@ export class TItemService {
   private readonly logger = createLogger(TItemService.name);
 
   constructor(
-    @InjectRepository(TItemEntity)
+    @InjectRepository(TItemEntity, 'data')
     private readonly repository: Repository<TItemEntity>,
     private readonly cache: CacheService,
   ) {}

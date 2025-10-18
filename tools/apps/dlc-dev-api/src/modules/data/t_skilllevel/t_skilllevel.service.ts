@@ -25,7 +25,7 @@ export class TSkilllevelService {
   private readonly logger = createLogger(TSkilllevelService.name);
 
   constructor(
-    @InjectRepository(TSkilllevelEntity)
+    @InjectRepository(TSkilllevelEntity, 'data')
     private readonly repository: Repository<TSkilllevelEntity>,
     private readonly cache: CacheService,
   ) {}

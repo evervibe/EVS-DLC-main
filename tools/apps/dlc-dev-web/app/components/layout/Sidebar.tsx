@@ -17,6 +17,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     { name: "Health", href: "/health", icon: "❤️", external: true },
   ];
 
+  const toolsNavigation = [
+    { name: "Strings", href: "/tools/strings", icon: "🔤" },
+  ];
+
   const isActive = (href: string) => pathname === href;
 
   return (
@@ -46,7 +50,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 DLC Dev Stack
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                v1.2.0-alpha
+                v1.2.2-alpha
               </p>
             </Link>
           </div>
@@ -93,6 +97,32 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 </Link>
               );
             })}
+
+            {/* Tools Section */}
+            <div className="pt-4 mt-4 border-t border-slate-200 dark:border-slate-700">
+              <div className="px-4 mb-2 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">
+                Tools
+              </div>
+              {toolsNavigation.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={onClose}
+                  className={`
+                    flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg
+                    transition-colors
+                    ${
+                      isActive(item.href)
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
+                        : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
+                    }
+                  `}
+                >
+                  <span className="text-lg">{item.icon}</span>
+                  <span>{item.name}</span>
+                </Link>
+              ))}
+            </div>
           </nav>
 
           {/* Footer */}
