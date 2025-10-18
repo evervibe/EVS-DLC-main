@@ -5,7 +5,7 @@ import { TStringController } from './t_string.controller';
 import { TStringService } from './t_string.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TStringEntity])],
+  imports: [TypeOrmModule.forFeature([TStringEntity], 'data')],
   controllers: [TStringController],
   providers: [TStringService],
   exports: [TStringService],

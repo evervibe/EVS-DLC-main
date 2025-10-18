@@ -23,7 +23,7 @@ export class TSkillService {
   private readonly logger = createLogger(TSkillService.name);
 
   constructor(
-    @InjectRepository(TSkillEntity)
+    @InjectRepository(TSkillEntity, 'data')
     private readonly repository: Repository<TSkillEntity>,
     private readonly cache: CacheService,
   ) {}

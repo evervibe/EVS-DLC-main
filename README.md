@@ -15,21 +15,23 @@
 ### Database Layout (Last Chaos Architecture)
 
 ```
-┌───────────────┬──────────┬─────────────────────────────────┐
-│  Database     │  Port    │  Purpose                        │
-├───────────────┼──────────┼─────────────────────────────────┤
-│ db_auth       │ 3306     │ Accounts & Authentication       │
-│ db_db         │ 3306     │ Game Data (Characters, World)   │
-│ db_data       │ 3306     │ Static Data (Items, Skills)     │
-│ db_post       │ 3306     │ CMS/Posts & Community Content   │
-└───────────────┴──────────┴─────────────────────────────────┘
+┌───────────────┬──────────┬───────────────────────────────────────┐
+│  Database     │  Port    │  Purpose                              │
+├───────────────┼──────────┼───────────────────────────────────────┤
+│ db_auth       │ 3306     │ Accounts & Authentication             │
+│ db_db         │ 3306     │ Game Data (Characters, World)         │
+│ db_data       │ 3306     │ Static Data (Items, Skills, Strings)  │
+│ db_post       │ 3306     │ CMS/Posts & Community Content         │
+└───────────────┴──────────┴───────────────────────────────────────┘
 ```
+
+**Core 3-Database Model:** The primary architecture focuses on `db_auth`, `db_db`, and `db_data`. The `db_post` database is optional for CMS functionality.
 
 ---
 
 ## 🔧 Technology Stack
 
-### Backend (DLC Dev API v1.2.1-alpha)
+### Backend (DLC Dev API v1.2.2-alpha)
 - **Framework:** NestJS 10.4.20 with Fastify adapter (pure Fastify, no Express)
 - **Language:** TypeScript 5.3.3
 - **ORM:** TypeORM 0.3.27
@@ -40,12 +42,12 @@
 - **Validation:** Joi 18.0.1 + class-validator 0.14.2
 - **Location:** `tools/apps/dlc-dev-api/`
 
-### Frontend (DLC Dev Web v1.2.1-alpha)
+### Frontend (DLC Dev Web v1.2.2-alpha)
 - **Framework:** Next.js 15.5.6 (App Router)
 - **UI Library:** React 19.1.0
 - **Language:** TypeScript 5.9.3
 - **Styling:** Tailwind CSS 4.1.14
-- **Features:** Login/Dashboard, API proxy, Dark mode support
+- **Features:** Login/Dashboard, API proxy, Dark mode, Tools → Strings
 - **Location:** `tools/apps/dlc-dev-web/`
 
 ### Infrastructure
@@ -153,6 +155,45 @@ EVS-DLC-main/
 
 ---
 
+## 🛠️ Tools & Features
+
+### Tools → Strings (v1.2.2-alpha)
+
+A language-aware string resource browser for viewing and searching game text in multiple languages.
+
+**Features:**
+- Browse string resources from `db_data.t_string`
+- Search functionality with real-time filtering
+- Language switching (20+ languages: ger, usa, spn, frc, rus, jpn, chn, twn, ita, tur, nld, uk, and more)
+- Pagination controls (50 items per page by default)
+- Dark mode compatible UI
+
+**API Endpoints:**
+```bash
+# List/search strings
+GET /data/strings?lang=ger&limit=50&offset=0&q=search
+
+# Get single string by index
+GET /data/strings/:id?lang=ger
+```
+
+**Example Usage:**
+```bash
+# Get German strings
+curl "http://localhost:30089/data/strings?lang=ger&limit=10"
+
+# Search for weapon strings in English
+curl "http://localhost:30089/data/strings?lang=usa&q=weapon"
+
+# Get specific string by index
+curl "http://localhost:30089/data/strings/1?lang=ger"
+```
+
+**Web Interface:**
+Navigate to `http://localhost:33440/tools/strings` to use the visual interface.
+
+---
+
 ## 🔒 Environment Variables
 
 See `.env.example` for a complete list of configuration options.
@@ -174,4 +215,4 @@ See `.env.example` for a complete list of configuration options.
 ---
 
 **Built with ❤️ by EverVibe Studios**  
-**Version:** 1.2.1-alpha (Production Ready) | **Updated:** 2025-10-18
+**Version:** 1.2.2-alpha (Production Ready) | **Updated:** 2025-10-18

@@ -23,7 +23,7 @@ export class TStringService {
   private readonly logger = createLogger(TStringService.name);
 
   constructor(
-    @InjectRepository(TStringEntity)
+    @InjectRepository(TStringEntity, 'data')
     private readonly repository: Repository<TStringEntity>,
     private readonly cache: CacheService,
   ) {}

@@ -5,7 +5,7 @@ import { TSkilllevelController } from './t_skilllevel.controller';
 import { TSkilllevelService } from './t_skilllevel.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TSkilllevelEntity])],
+  imports: [TypeOrmModule.forFeature([TSkilllevelEntity], 'data')],
   controllers: [TSkilllevelController],
   providers: [TSkilllevelService],
   exports: [TSkilllevelService],

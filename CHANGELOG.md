@@ -5,6 +5,68 @@ All notable changes to the EVS-DLC Development Stack will be documented in this 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.2-alpha] - 2025-10-18
+
+### Added
+- **Tools → Strings Feature (API-first)**
+  - New backend module at `/data/strings` with language-aware string retrieval
+  - Raw SQL queries with parameterized values for performance and security
+  - Support for 20+ languages via LANG_MAP (ger, usa, spn, frc, rus, jpn, chn, twn, ita, tur, nld, uk, dev, etc.)
+  - Pagination with limit/offset controls
+  - Full-text search via LIKE queries (with optional FULLTEXT index support)
+  - Read-only endpoints: GET /data/strings and GET /data/strings/:id
+- **Frontend Strings UI**
+  - Server-rendered page at `/tools/strings` using Next.js 15 App Router
+  - Thin client component with search, language switching, and pagination
+  - German-language UI labels (Suche, Zurück, Weiter, Seite)
+  - Responsive table layout with dark mode support
+  - Tools section added to sidebar navigation with Strings entry
+- **Named TypeORM Connection**
+  - Data module now uses named connection 'data' for better multi-database support
+  - Updated all data sub-modules (t_item, t_skill, t_skilllevel, t_string) to use named connection
+  - StringsService injects DataSource via @InjectDataSource('data')
+
+### Changed
+- **Environment Alignment (3-DB Model)**
+  - Root `.env.example` updated to v1.2.2-alpha specification
+  - Removed db_post references from environment examples (focusing on 3-DB core: auth, game/db_db, data)
+  - Removed ALL generic MYSQL_* keys from API `.env.example` (MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)
+  - Changed database passwords from "secret" to "root" for consistency
+  - Updated APP_VERSION to 1.2.2-alpha across all environment files
+  - Set SWAGGER_ENABLED=false as production-safe default
+  - Updated ADMIN_PASSWORD to "admin" per specification
+- **Version Bumps**
+  - API package.json: 1.2.1-alpha → 1.2.2-alpha
+  - Web package.json: 1.2.1-alpha → 1.2.2-alpha
+  - Sidebar version display: v1.2.0-alpha → v1.2.2-alpha
+
+### Technical Details
+- **Backend Architecture:**
+  - New strings module uses raw DataSource queries instead of TypeORM Repository pattern
+  - Language switching implemented via column mapping (LANG_MAP)
+  - Parameterized SQL queries prevent SQL injection
+  - Queries: `SELECT a_index, {lang_column} AS value FROM t_string WHERE ...`
+- **Frontend Architecture:**
+  - Server component fetches data on server-side (better SEO and performance)
+  - Client component handles only UI interactions (API-first principle)
+  - Uses Next.js 15 async searchParams API (Promise-based)
+  - State management via useRouter and useSearchParams hooks
+- **Database:**
+  - Targets db_data.t_string table with 26 language columns
+  - Optional FULLTEXT index on multilingual columns for improved search performance
+  - Read-only access pattern (no create/update/delete)
+
+### Documentation
+- Created `AUTO_ANALYSIS.md` - Comprehensive repository analysis and implementation plan
+- Created `AGENT_LOG_v1.2.2.md` - Detailed implementation notes and technical decisions
+- Updated `CHANGELOG.md` with v1.2.2-alpha release notes
+- Environment examples aligned to 3-DB model with clear documentation
+
+### Next Releases (Planned)
+- **v1.2.3-alpha:** Tools: Items (t_item) with faceted search and CSV export
+- **v1.2.4-alpha:** Tools: Skills (t_skill, t_skilllevel) with level matrix and dependencies
+- **v1.2.5-alpha:** Cache layer with selective Redis caching and invalidation
+
 ## [1.2.1-alpha] - 2025-10-18
 
 ### Changed

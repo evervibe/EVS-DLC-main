@@ -5,7 +5,7 @@ import { TItemController } from './t_item.controller';
 import { TItemService } from './t_item.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TItemEntity])],
+  imports: [TypeOrmModule.forFeature([TItemEntity], 'data')],
   controllers: [TItemController],
   providers: [TItemService],
   exports: [TItemService],
