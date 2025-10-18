@@ -56,12 +56,12 @@ export default function DashboardPage() {
       {/* Welcome Section */}
       <div className="mt-6 bg-white dark:bg-slate-800 rounded-lg shadow p-6">
         <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">
-          Welcome to DLC Dev Stack v1.1.0-alpha
+          Welcome to DLC Dev Stack v1.2.0-alpha
         </h2>
         <p className="text-slate-600 dark:text-slate-300 mb-4">
-          This is the modernized administration dashboard for the DLC Development Stack.
+          This is the production-ready administration dashboard for the DLC Development Stack.
           The stack includes a NestJS backend API with MySQL 8 database support,
-          JWT authentication, and this Next.js 15 frontend with enhanced UI/UX.
+          JWT authentication, comprehensive security, CI/CD pipeline, and this Next.js 15 frontend.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
           <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4">

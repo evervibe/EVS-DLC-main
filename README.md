@@ -16,7 +16,7 @@
 
 ## 🔧 Technology Stack
 
-### Backend (DLC Dev API v1.0.1-alpha)
+### Backend (DLC Dev API v1.2.0-alpha)
 - **Framework:** NestJS 10.4.20 with Fastify adapter (pure Fastify, no Express)
 - **Language:** TypeScript 5.3.3
 - **ORM:** TypeORM 0.3.27
@@ -27,7 +27,7 @@
 - **Validation:** Joi 18.0.1 + class-validator 0.14.2
 - **Location:** `tools/apps/dlc-dev-api/`
 
-### Frontend (DLC Dev Web v1.0.1-alpha)
+### Frontend (DLC Dev Web v1.2.0-alpha)
 - **Framework:** Next.js 15.5.6 (App Router)
 - **UI Library:** React 19.1.0
 - **Language:** TypeScript 5.9.3
@@ -158,4 +158,4 @@ See `.env.example` for a complete list of configuration options.
 ---
 
 **Built with ❤️ by EverVibe Studios**  
-**Version:** 1.0.1-alpha | **Updated:** 2025-10-18
+**Version:** 1.2.0-alpha (Production Ready) | **Updated:** 2025-10-18

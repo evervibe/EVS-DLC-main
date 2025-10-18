@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "DLC Dev Web - Admin Portal",
-  description: "DLC Development Stack v1.1.0-alpha",
+  description: "DLC Development Stack v1.2.0-alpha - Production Ready",
 };
 
 export default function RootLayout({

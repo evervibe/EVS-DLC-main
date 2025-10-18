@@ -34,7 +34,7 @@ export default function DashboardLayout({ children, title }: DashboardLayoutProp
               <p>
                 © 2025 EverVibe Studios • DLC Dev Stack{" "}
                 <span className="font-semibold text-blue-600 dark:text-blue-400">
-                  v1.1.0-alpha
+                  v1.2.0-alpha
                 </span>
               </p>
               <p className="text-xs">

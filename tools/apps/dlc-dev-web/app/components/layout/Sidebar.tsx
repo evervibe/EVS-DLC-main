@@ -46,7 +46,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 DLC Dev Stack
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                v1.1.0-alpha
+                v1.2.0-alpha
               </p>
             </Link>
           </div>

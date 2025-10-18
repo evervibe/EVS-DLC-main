@@ -5,6 +5,63 @@ All notable changes to the EVS-DLC Development Stack will be documented in this 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0-alpha] - 2025-10-18
+
+### Added
+- **CI/CD Pipeline**
+  - GitHub Actions workflow (`.github/workflows/ci.yml`)
+  - Automated build, lint, and type-check for API and Web
+  - Integration tests with MySQL and Redis services
+  - Health check verification in CI
+  - Auth endpoint testing
+  - Docker image build validation
+  - Artifact uploads for build outputs
+- **Production Documentation**
+  - Comprehensive DEPLOYMENT_GUIDE.md (12,200 chars)
+  - Docker deployment instructions
+  - Environment variable reference tables
+  - Reverse proxy configuration (Nginx examples)
+  - SSL/TLS setup guide with Certbot
+  - Database backup/restore procedures
+  - Troubleshooting section
+  - Performance tuning guidelines
+  - Monitoring and logging best practices
+  - Scaling strategies
+- **Security Features Activated**
+  - Helmet security headers (already installed, confirmed active)
+  - Rate limiting middleware (already installed, confirmed active)
+  - CORS properly configured
+  - JWT authentication fully integrated
+  - Production security checklist
+
+### Changed
+- Updated all versions to 1.2.0-alpha across the stack
+- Enhanced main.ts startup logging with version info
+- Updated health endpoint to report v1.2.0-alpha
+- Updated metrics endpoint to report v1.2.0-alpha
+- Refined Docker Compose configuration for production readiness
+- Updated README.md with "Production Ready" status
+- Enhanced metadata descriptions in frontend
+
+### Technical Details
+- **Security:** Helmet + Rate Limiting active by default
+- **CI/CD:** Full test pipeline with MySQL/Redis integration
+- **Docker:** Multi-stage builds optimized for production
+- **Node.js:** v20 LTS recommended
+- **Documentation:** Complete deployment and operational guides
+
+### Production Ready Features
+- ✅ JWT Authentication with secure token handling
+- ✅ Rate limiting to prevent abuse
+- ✅ Helmet security headers
+- ✅ Health checks and metrics endpoints
+- ✅ Docker support with multi-stage builds
+- ✅ CI/CD pipeline with automated testing
+- ✅ Comprehensive documentation
+- ✅ Database backup strategies
+- ✅ SSL/TLS configuration examples
+- ✅ Monitoring and logging guidance
+
 ## [1.1.0-alpha] - 2025-10-18
 
 ### Added
